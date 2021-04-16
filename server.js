@@ -45,6 +45,4 @@ app.get('/movie', function handleGetMovie(req, res) {
   res.json(response)
 })
 
-app.listen(8000, () => {
-  console.log('Server listening at http://localhost:8000')
-})
+app.listen(process.env.PORT)
