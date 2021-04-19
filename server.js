@@ -8,6 +8,7 @@ const movies = require('./movies-data-small.json')
 
 const app = express()
 
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
 app.use(morgan('dev'))
 app.use(cors())
 app.use(helmet())
@@ -45,4 +46,16 @@ app.get('/movie', function handleGetMovie(req, res) {
   res.json(response)
 })
 
-app.listen(process.env.PORT)
+app.use((error, req, res, next) => {
+  let response
+  if (process.env.NODE_ENV === 'production') {
+    response = { error: { message: 'server error' }}
+  } else {
+    response = { error }
+  }
+  res.status(500).json(response)
+})
+
+const PORT = process.env.PORT || 8000
+
+app.listen(PORT)
